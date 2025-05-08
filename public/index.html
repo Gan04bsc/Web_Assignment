@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction - My Website</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.apple.com/SFPro.css"> <!-- SF Pro font (use fallback if unavailable) -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="word-cloud-container">
+            <div class="word-cloud-controls">
+                <button onclick="highlightWords('info')">Basic Information</button>
+                <button onclick="highlightWords('hobby')">Hobby</button>
+                <button onclick="highlightWords('identity')">Identity</button>
+                <button onclick="highlightWords('character')">Character</button>
+            </div>
+            <div class="word-cloud">
+                <span class="word hobby" data-size="1.2">Basketball</span>
+                <span class="word character" data-size="1.5">Socially Anxious</span>
+                <span class="word identity" data-size="1.3">Vice-Captain</span>
+                <span class="word info" data-size="1.4">2023</span>
+                <span class="word hobby" data-size="1.3">Studying</span>
+                <span class="word identity" data-size="1.3">Class President</span>
+                <span class="word info" data-size="1.5">Male</span>
+                <span class="word hobby" data-size="1.4">Food</span>
+                <span class="word identity" data-size="1.3">Probationary Member</span>
+                <span class="word character" data-size="1.2">ISTJ</span>
+                <span class="word character" data-size="1.4">Outgoing</span>
+                <span class="word info" data-size="1.3">BMIS Student</span>
+            </div>
+            <a href="about.html" class="cta-button">Want to know more? Click About!</a>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Gan Fengrui</p>
+    </footer>
+    <script>
+    function highlightWords(type) {
+        document.querySelectorAll('.word').forEach(word => {
+            if (word.classList.contains(type)) {
+                word.classList.add('highlight');
+                word.classList.remove('dim');
+            } else {
+                word.classList.remove('highlight');
+                word.classList.add('dim');
+            }
+        });
+    }
+    // 可选：点击空白处恢复全部高亮
+    document.body.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON') {
+            document.querySelectorAll('.word').forEach(word => {
+                word.classList.remove('highlight', 'dim');
+            });
+        }
+    });
+    </script>
+</body>
+</html>
