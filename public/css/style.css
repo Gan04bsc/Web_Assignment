@@ -8,7 +8,7 @@
 body {
     font-family: 'SF Pro Display', -apple-system, Helvetica, Arial, sans-serif;
     font-weight: 300; /* Light weight */
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Subtle gradient background */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Subtle gradient */
     color: #333;
     line-height: 1.6;
     min-height: 100vh;
@@ -19,9 +19,10 @@ body {
 /* Navigation */
 header {
     background: rgba(255, 255, 255, 0.2); /* Semi-transparent */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
+    backdrop-filter: blur(10px); /* Frosted glass */
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Single-layer shadow */
+    transition: filter 0.3s ease; /* Smooth blur transition */
 }
 
 nav ul {
@@ -54,8 +55,194 @@ main {
     justify-content: center;
     align-items: center;
     padding: 40px;
+    transition: filter 0.3s ease; /* Smooth blur transition */
 }
 
+/* About Page */
+.about-container {
+    background: rgba(255, 255, 255, 0.7); /* Primary frosted glass, 70% opacity */
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.15), /* Directional shadow */
+              -4px -4px 16px rgba(255, 255, 255, 0.3); /* Subtle highlight */
+    max-width: 1000px;
+    text-align: center;
+    transition: filter 0.3s ease; /* Smooth blur transition */
+}
+
+.about-container h1 {
+    font-size: 36px;
+    font-weight: 400; /* Regular weight */
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr)); /* Two columns */
+    grid-template-rows: repeat(2, auto); /* Two rows */
+    gap: 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.2); /* Secondary opacity, 20% */
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 20px;
+    height: 200px; /* Fixed height for front face */
+    cursor: pointer;
+    position: relative;
+    perspective: 1000px; /* 3D perspective */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Single-layer shadow */
+}
+
+.card.active {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1); /* Center and reset scale after flip */
+    width: 80vw; /* Occupy most of screen */
+    max-width: 800px;
+    height: auto; /* Adjust height for content */
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.3); /* Slightly higher opacity for contrast */
+    padding: 30px;
+    animation: flipAndExpand 0.6s ease forwards; /* Flip animation */
+}
+
+@keyframes flipAndExpand {
+    0% {
+        transform: translate(-50%, -50%) rotateY(0deg) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotateY(180deg) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotateY(360deg) scale(1);
+    }
+}
+
+.card-front {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.card-back {
+    display: none; /* Hidden initially */
+    text-align: left;
+    padding: 20px;
+}
+
+.card.active .card-front {
+    display: none; /* Hide front when active */
+}
+
+.card.active .card-back {
+    display: block; /* Show back content when active */
+}
+
+/* Background blur when card is active */
+body.card-active main,
+body.card-active header,
+body.card-active footer,
+body.card-active .about-container,
+body.card-active .card:not(.active) {
+    filter: blur(8px); /* Apply blur to background */
+}
+
+.card h2 {
+    font-size: 24px;
+    font-weight: 400; /* Regular weight */
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 16px;
+    font-weight: 300; /* Light weight */
+    color: #444;
+    margin: 10px 0;
+}
+
+.card-back strong {
+    font-weight: 500; /* Bolder for highlighted text */
+    color: #333;
+}
+
+.card-back a {
+    color: #007aff;
+    text-decoration: none;
+}
+
+.card-back a:hover {
+    text-decoration: underline;
+}
+
+/* Call-to-Action Button (for Introduction page) */
+.cta-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background: #007aff;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 12px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #005bb5;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: filter 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        padding: 20px;
+    }
+    .card {
+        height: 180px;
+        padding: 15px;
+    }
+    .card.active {
+        width: 90vw; /* Wider on mobile */
+        max-width: 600px;
+        padding: 20px;
+    }
+    .about-container h1 {
+        font-size: 28px;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul li {
+        margin: 10px 0;
+    }
+    .card-grid {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
+    }
+}
+/* Word Cloud Container */
 .word-cloud-container {
     background: rgba(255, 255, 255, 0.7); /* Primary frosted glass, 70% opacity */
     backdrop-filter: blur(12px);
@@ -68,6 +255,30 @@ main {
     max-width: 800px;
     text-align: center;
 }
+/* Word Cloud Controls */
+.word-cloud-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.word-cloud-controls button {
+    margin: 0 10px;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2); /* Frosted glass button */
+    backdrop-filter: blur(8px);
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.word-cloud-controls button:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
 
 /* Word Cloud */
 .word-cloud {
@@ -75,11 +286,10 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 18px;
     padding: 20px;
 }
 
-/* ...existing code... */
 .word {
     font-size: 18px;
     color: #333;
@@ -87,7 +297,7 @@ main {
     padding: 8px 16px;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease, color 0.4s ease;
     position: relative;
     z-index: 1;
 }
@@ -99,34 +309,18 @@ main {
 
 .word.highlight,
 .word.highlight:hover {
-    color: #ff9800;
+    color: #ff9800; /* Vibrant orange for highlight */
     opacity: 1;
-    font-weight: bold;
-    text-shadow: 0 2px 8px #ffd580;
+    font-weight: 500; /* Slightly bolder */
+    text-shadow: 0 2px 8px rgba(255, 213, 128, 0.5); /* Softer glow */
     transform: scale(1.3);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
 .word.dim {
     color: #aaa;
     opacity: 0.4;
-}
-/* 按钮样式可自定义 */
-.word-cloud-controls {
-    margin-bottom: 16px;
-    text-align: center;
-}
-.word-cloud-controls button {
-    margin: 0 8px;
-    padding: 6px 18px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.word-cloud-controls button:hover {
-    background: #ffe0b2;
+    transform: scale(0.9); /* Slightly smaller for contrast */
 }
 
 /* Call-to-Action Button */
@@ -134,7 +328,7 @@ main {
     display: inline-block;
     margin-top: 20px;
     padding: 12px 24px;
-    background: #007aff;
+    background: #007aff; /* Apple blue */
     color: white;
     text-decoration: none;
     font-size: 16px;
@@ -164,6 +358,10 @@ footer {
     .word {
         font-size: 16px;
         padding: 6px 12px;
+    }
+    .word-cloud-controls button {
+        padding: 6px 16px;
+        font-size: 14px;
     }
     nav ul {
         flex-direction: column;
