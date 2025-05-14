@@ -55,7 +55,8 @@ main {
     justify-content: center;
     align-items: center;
     padding: 40px;
-    transition: filter 0.3s ease; /* Smooth blur transition */
+    width: 100%; /* Ensure the width takes up the full viewport */
+    height: 100vh; /* Take up the full height of the viewport */
 }
 /* Call-to-Action Button (for Introduction page) */
 .cta-button {
@@ -647,6 +648,8 @@ footer {
     transform: translateY(-2px);
 }
 
+
+
 /* Footer */
 footer {
     text-align: center;
@@ -654,4 +657,40 @@ footer {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     transition: filter 0.3s ease;
+}
+/* Styling for user's photo */
+.photo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-photo {
+    width: 200px; /* Adjust width as needed */
+    height: auto;
+    border-radius: 50%; /* Circle photo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Styling for the introductory text */
+.intro-text {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+}.intro-container {
+    max-width: 800px; /* Limit the width */
+    width: 100%;
+    text-align: center; /* Center text inside the container */
+}
+.apple-blue {
+    color: #007aff; /* Apple blue */
+    font-weight: bold;
+    font-size: 18px; /* Adjust size as needed */
+}
+
+/* Optional: Apply to certain strong tags to emphasize specific words */
+.apple-blue-strong {
+    color: #007aff; /* Apple blue */
+    font-weight: bold;
+    font-size: 18px; /* Adjust size */
 }
