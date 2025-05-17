@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Introduction - My Website</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://fonts.apple.com/SFPro.css"> <!-- SF Pro font -->
 </head>
 <body>
     <header>
@@ -19,9 +18,9 @@
     </header>
     <main>
         <section class="intro-container">
-            <!-- User's Image -->
+            <h2>About Me</h2>
             <div class="photo-container">
-                <img src="/images/Personal.jpg" alt="Gan Fengrui" class="user-photo" />
+                <img src="/images/Personal.jpg" alt="Gan Fengrui" class="user-photo">
             </div>
             <!-- Text Below Image -->
             <p class="intro-text">Click the buttons below to get to know more about me. You can learn about my basic information, hobbies, identity, and character.</p>
@@ -67,7 +66,7 @@
             }
         });
     }
-    // Optional: Reset all highlights when clicking outside the buttons
+    // Reset all highlights when clicking outside the buttons
     document.body.addEventListener('click', function(e) {
         if (e.target.tagName !== 'BUTTON') {
             document.querySelectorAll('.word').forEach(word => {
