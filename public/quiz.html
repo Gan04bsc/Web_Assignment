@@ -19,6 +19,9 @@
     </header>
     <main>
         <section class="quiz-container">
+            <div class="quiz-controls">
+                <button id="exit-game-button" class="cta-button">Exit Game</button>
+            </div>
             <h1>Quiz Challenge</h1>
             <div class="player-section">
                 <div class="player-input">
@@ -63,6 +66,24 @@
                     <button onclick="restartQuiz()" class="cta-button">Play Again</button>
                 </div>
             </div>
+                <div class="modal" id="opponent-left-modal" style="display:none;">
+                    <div class="modal-content">
+                        <h2>Your opponent has left the game</h2>
+                        <p>Your opponent has left the game. You win!</p>
+                        <button onclick="location.reload()" class="cta-button">OK</button>
+                    </div>
+                </div>
+
+                <div class="modal" id="confirm-exit-modal" style="display:none;">
+                <div class="modal-content">
+                    <h2>Confirm to exit</h2>
+                    <p>If you leave the game now, you will automatically admit defeat and your opponent will win. Are you sure you want to leave?</p>
+                    <div class="modal-buttons">
+                        <button id="exit-yes" class="cta-button">Yes, leave the game</button>
+                        <button id="exit-no" class="cta-button">Cancel and continue the game</button>
+                    </div>
+                </div>
+                </div>
         </section>
         <script src="js/quiz.js"></script>    
     </main>

@@ -87,7 +87,7 @@ main {
     text-align:center;
 }
 
-/* 卡片网格 */
+/* Card grid */
 .card-grid {
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -111,7 +111,7 @@ main {
     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* 卡片翻转弹出 */
+/* Card flip and pop-up */
 .card.active {
     filter: none !important; /* Ensure no blur on the active card */
     pointer-events: auto; /* Allow interaction with the active card */
@@ -131,13 +131,13 @@ main {
     display: block;
 }
 
-/* 隐藏前面，显示背面内容 */
+/* Hide front, show back content */
 .card-front { display:flex; justify-content:center; align-items:center; height:100%; }
 .card-back { display:none; text-align:left; }
 .card.active .card-front { display:none; }
 .card.active .card-back { display:block; }
 
-/* 关闭按钮 */
+/* Close button */
 .card-back-btn {
     position:absolute;
     top:18px; left:18px;
@@ -148,7 +148,7 @@ main {
     box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* 背景模糊——只在打开卡片时，模糊其余 */
+/* Background blur - blur others only when a card is open */
 body.card-active header,
 body.card-active footer,
 body.card-active .card-grid > .card:not(.active) {
@@ -158,7 +158,7 @@ body.card-active .card-grid > .card:not(.active) {
     transition: filter 0.3s ease;
 }
 
-/* 动画关键帧 */
+/* Animation keyframes */
 @keyframes flipAndExpand {
     0%   { transform: translate(-50%, -50%) rotateY(0deg)   scale(0.8); }
     50%  { transform: translate(-50%, -50%) rotateY(180deg) scale(1.1); }
@@ -442,6 +442,32 @@ footer {
     font-weight: 400; /* Regular weight */
     color: #333;
     margin-bottom: 30px;
+}.quiz-controls {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#exit-game-button {
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#exit-game-button:hover {
+    background-color: #ff0000;
+}
+#confirm-exit-modal .modal-content {
+    border: 2px solid #ff5252;
+}
+
+#exit-yes {
+    background-color: #ff5252;
+}
+
+#exit-no {
+    background-color: #4CAF50;
 }
 
 .player-section {

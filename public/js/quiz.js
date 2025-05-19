@@ -11,6 +11,7 @@ let opponentScore = 0;
 let timer = null;
 const TIME_PER_QUESTION = 10;
 let questionAnswered = false;
+let intentionalExit = false;
 
 const playerNameInput = document.getElementById('player-name');
 const playerList = document.getElementById('player-list');
@@ -29,8 +30,15 @@ const acceptChallenge = document.getElementById('accept-challenge');
 const rejectChallenge = document.getElementById('reject-challenge');
 const resultModal = document.getElementById('result-modal');
 const resultMessage = document.getElementById('result-message');
+const exitGameButton = document.getElementById('exit-game-button');
+const confirmExitModal = document.getElementById('confirm-exit-modal');
+const exitYesButton = document.getElementById('exit-yes');
+const exitNoButton = document.getElementById('exit-no');
 
-// Quiz data (仅用于本地显示题目，实际判题以服务端为准)
+if (exitGameButton) {
+    exitGameButton.style.display = 'none';
+}
+
 const quizData = [
     {
         question: "This fruit is?",
@@ -107,20 +115,19 @@ socket.on('updatePlayers', (playerListData) => {
     updatePlayerList();
 });
 
-// 挑战请求弹窗
+// Challenge request modal
 socket.on('challengeRequest', ({ challengerId, challengerName }) => {
     opponentId = challengerId;
     modalTitle.textContent = 'Challenge Request';
     modalMessage.textContent = `${challengerName} wants to challenge you!`;
     challengeModal.style.display = 'flex';
 });
-
-// 挑战被拒绝
+// Challenge rejected
 socket.on('challengeRejected', () => {
     alert('Your challenge was rejected.');
 });
 
-// 接受/拒绝挑战
+// Accept/Reject challenge
 acceptChallenge.onclick = () => {
     socket.emit('acceptChallenge', opponentId);
     challengeModal.style.display = 'none';
@@ -130,7 +137,7 @@ rejectChallenge.onclick = () => {
     challengeModal.style.display = 'none';
 };
 
-// 开始游戏
+// Start game
 socket.on('startGame', ({ gameId, opponent: oppName }) => {
     currentGameId = gameId;
     quizSection.style.display = 'block';
@@ -141,9 +148,13 @@ socket.on('startGame', ({ gameId, opponent: oppName }) => {
     playerScoreText.textContent = `You: 0`;
     opponentScoreText.textContent = `Opponent: 0`;
     loadQuestion();
+
+    if (exitGameButton) {
+        exitGameButton.style.display = 'block';
+    }
 });
 socket.on('nextQuestion', (question) => {
-    // 直接更新题号
+    // Update question number
     currentQuestion++;
     
     setTimeout(() => {
@@ -158,7 +169,7 @@ socket.on('scoreUpdate', ({ yourScore, opponentScore }) => {
     opponentScoreText.textContent = `Opponent: ${opponentScore}`;
 });
 socket.on('stopTimeForBoth', ({ correctAnswer }) => {
-    console.log('收到停止指令:', correctAnswer);
+    console.log('Received stop command:', correctAnswer);
     clearInterval(timer);
     timerProgress.style.width = '0%';
     
@@ -167,7 +178,7 @@ socket.on('stopTimeForBoth', ({ correctAnswer }) => {
         option.style.pointerEvents = 'none';
         option.style.cursor = 'default';
         
-        // 对选项进行标记
+        // Mark options
         if (option.textContent.trim() === correctAnswer.trim()) {
             option.classList.add('correct');
         }
@@ -176,7 +187,10 @@ socket.on('stopTimeForBoth', ({ correctAnswer }) => {
     questionAnswered = true;
 });
 
-
+socket.on('opponentLeft', () => {
+  console.log("Opponent has left the game");
+  document.getElementById('opponent-left-modal').style.display = 'flex';
+});
 socket.on('endGame', ({ yourScore, opponentScore }) => {
     let msg = `Your final score: ${yourScore}. Opponent: ${opponentScore}. `;
     if (yourScore > opponentScore) msg += "You Win!";
@@ -188,7 +202,6 @@ socket.on('endGame', ({ yourScore, opponentScore }) => {
 
 
 function loadQuestion(q) {
-    // q 为空时用本地 quizData
     let questionObj = q || quizData[currentQuestion];
     questionNumber.textContent = `Question ${currentQuestion + 1}/${quizData.length}`;
     questionImage.src = questionObj.image;
@@ -220,55 +233,116 @@ function startTimer() {
 }
 
 
+
 function selectOption(selected) {
     if (questionAnswered) return;
     questionAnswered = true;
     clearInterval(timer);
     
-    // 禁用所有选项
+    // Disable all options
     const options = document.querySelectorAll('.option');
     options.forEach(option => option.style.pointerEvents = 'none');
     
-    // 通知服务器提交答案 (服务器会返回 stopTimeForBoth 事件)
     socket.emit('answer', { gameId: currentGameId, selected });
 
+
+
 const correctAnswer = quizData[currentQuestion].answer;
-console.log('Debug - 答题:', {selected, correctAnswer, currentQuestion});
+console.log('Debug - Answer:', {selected, correctAnswer, currentQuestion});
 
 options.forEach(option => {
-    // 先移除可能存在的类
     option.classList.remove('correct', 'wrong');
     
     const optionText = option.textContent.trim();
     const correctAnswerText = correctAnswer.trim();
     
-    // 选择的选项
     if (optionText === selected) {
-        // 选择正确 - 绿色
         if (selected === correctAnswerText) {
             option.classList.add('correct');
-            console.log('选择正确:', optionText);
+            console.log('Correct selection:', optionText);
         } 
-        // 选择错误 - 红色
         else {
             option.classList.add('wrong');
-            console.log('选择错误:', optionText);
+            console.log('Wrong selection:', optionText);
         }
     }
-    // 标记正确答案
     else if (optionText === correctAnswerText) {
         option.classList.add('correct');
-        console.log('正确答案标记:', optionText);
+        console.log('Correct answer marked:', optionText);
     }
 });
 
-    // 更新得分板
     setTimeout(() => {
-        socket.emit('scoreUpdate'); // 更新得分
-    }, 3000); // 等待3秒
+        socket.emit('scoreUpdate'); 
+    }, 3000); 
 }
 
-// 重新开始
 function restartQuiz() {
     window.location.reload();
 }
+
+exitGameButton.addEventListener('click', () => {
+    if (currentGameId) {
+        confirmExitModal.style.display = 'flex';
+    } else {
+        window.location.reload();
+    }
+});
+
+exitYesButton.onclick = function() {
+    if (currentGameId) {
+        socket.emit('leaveGame', { gameId: currentGameId });
+    }
+    confirmExitModal.style.display = 'none';
+    
+
+    intentionalExit = true;
+    
+    if (confirmExitModal.dataset.destination) {
+        window.location.href = confirmExitModal.dataset.destination;
+    } else {
+        window.location.reload();
+    }
+};
+
+exitNoButton.addEventListener('click', () => {
+    confirmExitModal.style.display = 'none';
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentGameId) {
+        confirmExitModal.style.display = 'flex';
+    }
+});
+window.addEventListener('beforeunload', (e) => {
+    if (currentGameId && !intentionalExit) {
+        e.preventDefault();
+        e.returnValue = 'Are you sure you want to leave the game? You will automatically forfeit!';
+        return e.returnValue;
+        
+    }
+});
+document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        if (currentGameId) {
+            e.preventDefault();
+            confirmExitModal.style.display = 'flex';
+            
+            confirmExitModal.dataset.destination = this.href;
+        }
+    });
+});
+
+const originalExitYesHandler = exitYesButton.onclick;
+exitYesButton.onclick = function() {
+    if (currentGameId) {
+        socket.emit('leaveGame', { gameId: currentGameId });
+    }
+    confirmExitModal.style.display = 'none';
+    
+    if (confirmExitModal.dataset.destination) {
+        window.location.href = confirmExitModal.dataset.destination;
+    } else {
+        window.location.reload();
+    }
+};

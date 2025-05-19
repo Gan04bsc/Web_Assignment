@@ -6,13 +6,12 @@ function toggleCard(card) {
         // Close any other active card
         document.querySelectorAll('.card.active').forEach(activeCard => {
             activeCard.classList.remove('active');
-            // 移除Back按钮
+            // Remove Back button
             const btn = activeCard.querySelector('.card-back-btn');
             if (btn) btn.remove();
         });
         card.classList.add('active');
         document.body.classList.add('card-active');
-        // 添加Back按钮
         if (!card.querySelector('.card-back-btn')) {
             const backBtn = document.createElement('button');
             backBtn.className = 'card-back-btn';
@@ -30,7 +29,7 @@ function toggleCard(card) {
 function closeCard(card) {
     card.classList.remove('active');
     document.body.classList.remove('card-active');
-    // 移除Back按钮
+    // Remove Back button
     const btn = card.querySelector('.card-back-btn');
     if (btn) btn.remove();
 }
@@ -47,15 +46,13 @@ document.querySelectorAll('.card').forEach(card => {
             e.target.tagName === 'BUTTON' ||
             e.target.classList.contains('card-back-btn')
         ) {
-            return; // Allow text selection or button click
+            return; 
         }
-        // 只有未激活时才允许点击打开
         if (!card.classList.contains('active')) {
             toggleCard(card);
         }
     });
 
-    // Handle keyboard interaction
     card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === 'Space') {
             e.preventDefault();
